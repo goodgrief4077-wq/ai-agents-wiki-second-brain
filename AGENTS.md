@@ -22,6 +22,7 @@ A lean, fast, comprehensive, cited public second brain for AI agents: a wiki of 
 9. `draft` is NOT a quarantine and a green lint is NOT authorization. The gate is Sir's merge. Agents set `status: draft`; only a flip PR makes a page `live`, meaning "5 claims spot-checked against the source".
 10. Query never writes. Deliberate deviation from the Karpathy pattern (answers filed back as pages) because of memory poisoning.
 11. Readers pin a full commit SHA, read `wiki/index.md` first, open only matching pages, cite pages actually opened, else answer "not in wiki". Skip `draft` and `superseded` unless asked.
+12. Generic and modular. Each page covers one tool or method and reads on its own; each `skills/<name>/` folder stands alone. A reader can copy one page or one skill folder without the rest. Write for any agent or person: no owner-specific details. Private details belong in the owner's private notes, never here.
 
 ## Formats (templates in `scripts/templates/`)
 - Frontmatter: block lists only (`- item`), no inline `[a, b]`. Scalars split on the first `: `. A value or list item containing `: ` or ` #` MUST be quoted. Timestamps ISO with offset (`2026-10-11T10:00:00+09:00`). `status:` and `updated:` lines are written canonically (no quotes, no trailing space).
