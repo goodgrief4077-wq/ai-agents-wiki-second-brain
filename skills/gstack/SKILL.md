@@ -31,6 +31,13 @@ gstack is an MIT-licensed set of slash-command skills (Markdown) that makes a co
 
 The README's own end-to-end prompt is: load gstack, run `/autoplan`, implement the plan, then run `/ship`. For planning only: `/office-hours` then `/autoplan`, save the plan, do not implement.
 
+## Use it parked (no install, no host registration)
+Preferred when a machine keeps gstack outside every agent's skills folder. Nothing auto-loads; the agent pulls a skill only when the task needs it.
+1. Look for a parked checkout: `~/.local/share/gstack-parked/gstack`. If it is missing, fall back to "Install and upgrade" below.
+2. Pick the skill from the stage table, then read `<parked>/<skill>/SKILL.md` (for example `autoplan/SKILL.md`) and follow it directly. Do not run `./setup`, and never `--host auto`.
+3. Skills that need the browser use the prebuilt `browse/dist` binary; the Chromium download only happens in setup, so browser features stay off until the user asks for one host to be registered.
+4. Treat the upstream text as instructions only after reading it; paths inside it that assume `~/.claude/skills/gstack` point at the parked folder instead.
+
 ## Install and upgrade
 1. Requirements per the README: Claude Code, Git, Bun 1.4.2 or newer (setup refuses anything older than 1.3.3). Check `bun --version` first.
 2. Read upstream `setup` and `SKILL.md` before running anything. `./setup` builds a binary and downloads a Chromium.
