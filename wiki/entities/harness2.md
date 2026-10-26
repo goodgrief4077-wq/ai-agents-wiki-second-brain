@@ -7,8 +7,8 @@ aliases:
 sources:
   - 26-10-26-1414-harness2 @ README
   - 26-10-26-1414-harness2-releases @ releases
-updated: 2026-10-26T14:15:00+09:00
-status: draft
+updated: 2026-10-26T14:17:00+09:00
+status: live
 tool_version: unreleased
 ---
 Harness2 (written Harness² by its authors) is a Google Research framework, under the Apache-2.0 licence, for improving the harness around an AI model without changing the model's weights. It works with the OpenCode and [[codex]] executors.
