@@ -4,8 +4,8 @@ type: tool
 sources:
   - 26-10-26-1125-uptime-kuma @ README
   - 26-10-26-1125-uptime-kuma-releases @ releases
-updated: 2026-10-26T11:31:09+09:00
-status: draft
+updated: 2026-10-26T11:32:15+09:00
+status: live
 tool_version: 2.5.7
 ---
 Uptime Kuma is a self-hosted monitoring tool with a web dashboard that checks whether services are up and sends alerts when they are not.
