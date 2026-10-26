@@ -6,7 +6,7 @@ aliases:
 sources:
   - 26-10-26-1414-kindi @ README
   - 26-10-26-1414-kindi-releases @ releases
-updated: 2026-10-26T14:30:00+09:00
+updated: 2026-10-26T14:15:00+09:00
 status: draft
 tool_version: 0.2.0
 ---

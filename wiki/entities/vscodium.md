@@ -4,7 +4,7 @@ type: tool
 sources:
   - 26-10-26-1414-vscodium @ README
   - 26-10-26-1414-vscodium-releases @ releases
-updated: 2026-10-26T14:30:00+09:00
+updated: 2026-10-26T14:15:00+09:00
 status: draft
 tool_version: 1.140.06880
 ---

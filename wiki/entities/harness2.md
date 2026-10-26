@@ -7,7 +7,7 @@ aliases:
 sources:
   - 26-10-26-1414-harness2 @ README
   - 26-10-26-1414-harness2-releases @ releases
-updated: 2026-10-26T14:30:00+09:00
+updated: 2026-10-26T14:15:00+09:00
 status: draft
 tool_version: unreleased
 ---
