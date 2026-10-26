@@ -7,8 +7,8 @@ aliases:
 sources:
   - 26-10-26-1414-kilocode @ README
   - 26-10-26-1414-kilocode-releases @ releases
-updated: 2026-10-26T14:15:00+09:00
-status: draft
+updated: 2026-10-26T14:17:00+09:00
+status: live
 tool_version: 7.8.17
 ---
 Kilo Code is an open source (MIT) coding agent that runs in VS Code, JetBrains IDEs or a command-line interface. Compare [[pi-coding-agent]] and [[codex]].
