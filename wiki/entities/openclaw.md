@@ -4,8 +4,11 @@ type: tool
 sources:
   - 2026-10-11-openclaw @ page
   - 2026-10-12-openclaw-releases @ releases
-updated: 2026-10-12T09:11:53+09:00
+  - 26-10-27-1138-wiki-pr52-page-tiers @ description
+updated: 2026-10-27T11:40:00+09:00
 status: draft
+tier: volatile
+review_by: 2027-01-25
 tool_version: 2026.10.1
 ---
 OpenClaw is an open-source personal AI assistant you run on your own devices and reach through the chat apps you already use.

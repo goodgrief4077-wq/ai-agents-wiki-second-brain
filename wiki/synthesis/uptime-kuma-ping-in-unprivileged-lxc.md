@@ -4,8 +4,10 @@ type: synthesis
 sources:
   - 26-10-26-1125-proxmox-lxc-unprivileged-ping @ thread
   - 26-10-26-1125-uptime-kuma @ README
-updated: 2026-10-26T11:31:09+09:00
+  - 26-10-27-1138-wiki-pr52-page-tiers @ description
+updated: 2026-10-27T11:40:00+09:00
 status: draft
+tier: core
 ---
 Ping monitors in [[uptime-kuma]] can stay pending or red inside an unprivileged LXC container even though the targets are reachable. This page records the cause and the fixes seen on one host (unsourced; own test, one host).
 

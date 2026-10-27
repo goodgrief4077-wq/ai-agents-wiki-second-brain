@@ -6,8 +6,11 @@ aliases:
 sources:
   - 26-10-26-1414-kindi @ README
   - 26-10-26-1414-kindi-releases @ releases
-updated: 2026-10-26T14:15:00+09:00
+  - 26-10-27-1138-wiki-pr52-page-tiers @ description
+updated: 2026-10-27T11:40:00+09:00
 status: draft
+tier: volatile
+review_by: 2027-01-25
 tool_version: 0.2.0
 ---
 Kindi is a custom inference engine, not a coding agent, for Prism ML's Ternary-Bonsai-2 language models on low-cost NVIDIA GPUs. Compare [[llama-cpp]] and [[ollama]].

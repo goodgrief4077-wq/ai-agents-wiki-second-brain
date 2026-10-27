@@ -6,8 +6,11 @@ aliases:
 sources:
   - 2026-10-11-github-fivetaku-llm-wiki @ README
   - 2026-10-12-fivetaku-llm-wiki-releases @ releases
-updated: 2026-10-12T09:10:05+09:00
+  - 26-10-27-1138-wiki-pr52-page-tiers @ description
+updated: 2026-10-27T11:40:00+09:00
 status: draft
+tier: volatile
+review_by: 2027-01-25
 tool_version: unreleased
 ---
 A Korean-language starter workspace (fivetaku/llm-wiki, MIT) that implements the pattern in [[llm-wiki-pattern]] for Claude Code.

@@ -5,8 +5,11 @@ sources:
   - 2026-10-11-github-microsoft-vscode @ page
   - 2026-10-11-vscode-docs-overview @ page
   - 2026-10-12-vs-code-releases @ releases
-updated: 2026-10-12T09:13:03+09:00
+  - 26-10-27-1138-wiki-pr52-page-tiers @ description
+updated: 2026-10-27T11:40:00+09:00
 status: draft
+tier: volatile
+review_by: 2027-01-25
 tool_version: 1.141.0
 ---
 Visual Studio Code is Microsoft's code editor, developed in the open as the MIT-licensed Code - OSS repository and shipped as a Microsoft-licensed distribution.

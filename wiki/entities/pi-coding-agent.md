@@ -7,8 +7,11 @@ aliases:
 sources:
   - 2026-10-11-github-earendil-works-pi @ README
   - 2026-10-12-pi-coding-agent-releases @ releases
-updated: 2026-10-12T09:12:05+09:00
+  - 26-10-27-1138-wiki-pr52-page-tiers @ description
+updated: 2026-10-27T11:40:00+09:00
 status: live
+tier: volatile
+review_by: 2027-01-25
 tool_version: 1.1.0
 ---
 A minimal, extensible agent harness (earendil-works/pi, MIT) for coding with LLMs.

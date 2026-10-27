@@ -4,8 +4,11 @@ type: tool
 sources:
   - 2026-10-11-hugging-face-hub @ page
   - 2026-10-12-hugging-face-hub-releases @ releases
-updated: 2026-10-12T09:10:41+09:00
+  - 26-10-27-1138-wiki-pr52-page-tiers @ description
+updated: 2026-10-27T11:40:00+09:00
 status: draft
+tier: volatile
+review_by: 2027-01-25
 tool_version: v2.2.0
 ---
 huggingface_hub is the official Python library and hf command-line tool for working with the Hugging Face Hub.

@@ -4,8 +4,11 @@ type: tool
 sources:
   - 26-10-24-1345-rea @ README
   - 26-10-24-1345-rea-releases @ releases
-updated: 2026-10-24T13:49:07+09:00
+  - 26-10-27-1138-wiki-pr52-page-tiers @ description
+updated: 2026-10-27T11:40:00+09:00
 status: draft
+tier: volatile
+review_by: 2027-01-25
 tool_version: 6.7.0
 ---
 REA is an MCP server and command-line tool that lets a coding agent reverse engineer binaries, applications and runtime behaviour and get findings back with evidence.

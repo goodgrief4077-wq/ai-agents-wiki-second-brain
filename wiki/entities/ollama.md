@@ -4,8 +4,11 @@ type: tool
 sources:
   - 2026-10-11-ollama @ page
   - 2026-10-12-ollama-releases @ releases
-updated: 2026-10-12T09:11:44+09:00
+  - 26-10-27-1138-wiki-pr52-page-tiers @ description
+updated: 2026-10-27T11:40:00+09:00
 status: draft
+tier: volatile
+review_by: 2027-01-25
 tool_version: v0.40.3
 ---
 Ollama is a tool for running open models locally through a CLI and REST API, with launchers for several coding agents.

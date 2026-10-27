@@ -4,8 +4,11 @@ type: tool
 sources:
   - 2026-10-11-mpp @ page
   - 2026-10-12-mpp-releases @ releases
-updated: 2026-10-12T09:11:31+09:00
+  - 26-10-27-1138-wiki-pr52-page-tiers @ description
+updated: 2026-10-27T11:40:00+09:00
 status: draft
+tier: volatile
+review_by: 2027-01-25
 tool_version: unreleased
 ---
 The Machine Payments Protocol (MPP) is an open protocol for machine-to-machine payments over an HTTP 402 flow; this repository is its documentation site.

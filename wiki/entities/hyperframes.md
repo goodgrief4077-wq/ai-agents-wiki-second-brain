@@ -4,8 +4,11 @@ type: tool
 sources:
   - 2026-10-11-hyperframes @ page
   - 2026-10-12-hyperframes-releases @ releases
-updated: 2026-10-12T09:10:49+09:00
+  - 26-10-27-1138-wiki-pr52-page-tiers @ description
+updated: 2026-10-27T11:40:00+09:00
 status: draft
+tier: volatile
+review_by: 2027-01-25
 tool_version: v0.8.149
 ---
 HyperFrames is an open-source framework for rendering HTML-based compositions into deterministic MP4 video, built to be driven by coding agents.

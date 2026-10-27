@@ -4,8 +4,11 @@ type: tool
 sources:
   - 26-10-26-1414-vscodium @ README
   - 26-10-26-1414-vscodium-releases @ releases
-updated: 2026-10-26T14:15:00+09:00
+  - 26-10-27-1138-wiki-pr52-page-tiers @ description
+updated: 2026-10-27T11:40:00+09:00
 status: draft
+tier: volatile
+review_by: 2027-01-25
 tool_version: 1.140.06880
 ---
 VSCodium is a community project that builds Microsoft's vscode source into freely-licensed binaries, as an alternative to Microsoft's own branded distribution. See [[vs-code]] for the upstream editor.

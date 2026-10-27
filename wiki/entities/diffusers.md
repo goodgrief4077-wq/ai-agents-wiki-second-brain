@@ -4,8 +4,11 @@ type: tool
 sources:
   - 2026-10-11-diffusers @ page
   - 2026-10-12-diffusers-releases @ releases
-updated: 2026-10-12T09:09:51+09:00
+  - 26-10-27-1138-wiki-pr52-page-tiers @ description
+updated: 2026-10-27T11:40:00+09:00
 status: draft
+tier: volatile
+review_by: 2027-01-25
 tool_version: v0.41.0
 ---
 Diffusers is Hugging Face's Python library for running and building diffusion models for image, audio and 3D generation.

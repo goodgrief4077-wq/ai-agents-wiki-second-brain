@@ -5,8 +5,11 @@ sources:
   - 2026-10-11-blender @ page
   - 2026-10-12-blender-releases @ releases
   - 2026-10-12-blender-licence @ COPYING
-updated: 2026-10-12T09:26:58+09:00
+  - 26-10-27-1138-wiki-pr52-page-tiers @ description
+updated: 2026-10-27T11:40:00+09:00
 status: draft
+tier: volatile
+review_by: 2027-01-25
 tool_version: v5.2.2
 ---
 Blender is a free and open source 3D creation suite; this GitHub repository is a mirror of it (the About line says official mirror).

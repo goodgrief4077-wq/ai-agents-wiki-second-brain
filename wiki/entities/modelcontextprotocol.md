@@ -5,8 +5,11 @@ sources:
   - 2026-10-11-modelcontextprotocol @ page
   - 2026-10-12-modelcontextprotocol-releases @ releases
   - 2026-10-12-modelcontextprotocol-licence @ LICENSE
-updated: 2026-10-12T09:26:58+09:00
+  - 26-10-27-1138-wiki-pr52-page-tiers @ description
+updated: 2026-10-27T11:40:00+09:00
 status: draft
+tier: volatile
+review_by: 2027-01-25
 tool_version: 2026-07-28
 ---
 Model Context Protocol (MCP) is a protocol; this repository holds its specification, protocol schema and official documentation.
