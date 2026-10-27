@@ -38,6 +38,14 @@ The current page count and status mix are in `wiki/index.md`; scope and freshnes
 
 A `live` page means that five of its claims were checked against the source. A `draft` page has not had that check.
 
+## Plug it in
+
+Everything here is generic and modular, so you can take one piece without the rest.
+
+- **Use the wiki as your agent's memory.** Clone this repo, then add a line like this to your agent's instructions file (`AGENTS.md`, `CLAUDE.md` or similar): "For AI-agent tools and methods, read `<wiki-checkout>/wiki/index.md` first and follow its Read the wiki steps. If no page matches, answer: not in wiki."
+- **Take one skill.** Copy one folder from `skills/` into your agent's skills folder (for example `~/.claude/skills/` or `~/.agents/skills/`) and fill in its `<placeholders>`. Each folder stands alone.
+- **Take one page.** Each page in `wiki/` covers one tool or method and lists its own sources, so you can read or cite it on its own.
+
 ## Page format
 
 Every page starts with frontmatter. This is a tool page:
