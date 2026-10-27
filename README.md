@@ -15,7 +15,7 @@ Agent tools change every week, and memory that an agent writes for itself drifts
 
 ## Contents
 
-At commit `dfcc825` the wiki has 40 pages and 44 raw records. Three pages are `live` and 37 are `draft`.
+The current page count and status mix are in `wiki/index.md`; scope and freshness are in the generated `index.json` (see `scope.txt`).
 
 | Section | Type | What it holds |
 | --- | --- | --- |

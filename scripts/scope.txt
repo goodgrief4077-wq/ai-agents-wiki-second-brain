@@ -1,0 +1,5 @@
+# Declared scope of the wiki: the single source for the generated index.json and llms.txt.
+# "covers" comes from scripts/kinds.txt (plus skills). "current_as_of" is computed at export time.
+# AGENTS.md must state the same list in parentheses (lint WARN SCOPE_DRIFT if it does not).
+not_covered: private material of the owner (people, health, accounts, machines, keys, plans)
+read_rule: pin a commit SHA; skip status draft and superseded unless asked; cite pages you opened; else answer 'not in wiki'
