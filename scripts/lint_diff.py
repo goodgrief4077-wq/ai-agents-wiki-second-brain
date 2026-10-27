@@ -130,10 +130,18 @@ def body_of(text):
 
 
 def frontmatter_of(text):
-    """Frontmatter lines without the updated: line (LF-normalised)."""
+    """Frontmatter lines without the updated: line (LF-normalised); [] if there is no frontmatter."""
     lines = text.replace("\r\n", "\n").split("\n")
     _s, end = read_status(text)
     return [ln for ln in lines[1:end - 1] if not ln.startswith("updated: ")] if end else []
+
+
+def title_of(text):
+    """Frontmatter title: value, or None."""
+    for ln in frontmatter_of(text or ""):
+        if ln.startswith("title: "):
+            return ln[7:].strip()
+    return None
 
 
 def old_blocks(text):
@@ -221,13 +229,18 @@ def analyze(root, base, env=None):
         del pages
 
     deleted_pages = {os.path.basename(c.path): c.path for c in changes if c.status == "D" and is_page(c.path)}
-    added_names = {os.path.basename(c.path) for c in changes if c.status == "A" and is_page(c.path)}
+    added_pages = {os.path.basename(c.path): c.path for c in changes if c.status == "A" and is_page(c.path)}
     for c in changes:
-        # history is never lost: a page leaves by moving to archive/ (same slug) or status: superseded
-        if c.status == "D" and is_page(c.path) and os.path.basename(c.path) not in added_names:
-            add(HARD, "PAGE_DELETED", c.path, 0,
-                "page deleted: move it to archive/ or set status: superseded, never delete")
-        if c.status == "D" and c.path.startswith("wiki/log/"):
+        # history is never lost: a page leaves by moving to archive/ (same slug, title, status) or via a flip to superseded
+        if c.status == "D" and is_page(c.path):
+            dst = added_pages.get(os.path.basename(c.path))
+            if dst is None:
+                add(HARD, "PAGE_DELETED", c.path, 0,
+                    "page deleted: move it to archive/, or retire it with status: superseded in a separate flip PR; never delete")
+            elif title_of(text_at(root, mb, c.path, env)) != title_of(text_at(root, "HEAD", dst, env)):
+                add(HARD, "PAGE_REPLACED", dst, 0,
+                    "%s reuses the slug of deleted %s with another title: a move keeps title, content and status" % (dst, c.path))
+        if (c.status == "D" and c.path.startswith("wiki/log/") and c.path.endswith(".md")):
             add(HARD, "LOG_DELETED", c.path, 0, "ingest logs are add-only: do not delete")
     for c in changes:
         if not is_page(c.path) or c.new_mode == SYMLINK_MODE:
@@ -297,7 +310,7 @@ def _read(path):
 
 
 def _expect(path):
-    exp = {"exit": 0, "class": None, "hard": set(), "symlink": [], "base_sha": None}
+    exp = {"exit": 0, "class": None, "hard": set(), "info": set(), "symlink": [], "base_sha": None}
     for ln in _read(path).split("\n"):
         k, _, v = ln.partition(":")
         k, v = k.strip(), v.strip()
@@ -307,6 +320,8 @@ def _expect(path):
             exp["class"] = v
         elif k == "hard":
             exp["hard"] = set(v.split())
+        elif k == "info":
+            exp["info"] = set(v.split())
         elif k == "symlink":
             exp["symlink"] = v.split()
         elif k == "base_sha":
@@ -391,7 +406,8 @@ def run_selftest():
             shutil.rmtree(tmp, ignore_errors=True)
         hard = {f.code for f in fs if f.level == HARD}
         code = 1 if hard else 0
-        ok = code == exp["exit"] and hard == exp["hard"] and cls == exp["class"]
+        info = {f.code for f in fs if f.level == INFO}
+        ok = code == exp["exit"] and hard == exp["hard"] and cls == exp["class"] and exp["info"] <= info
         failed += 0 if ok else 1
         print("%s %s (class %s, exit %d, HARD %s)" % ("PASS" if ok else "FAIL", case, cls, code,
                                                       " ".join(sorted(hard)) or "-"))

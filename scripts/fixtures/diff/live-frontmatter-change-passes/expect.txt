@@ -1,3 +1,4 @@
 exit: 0
 class: ingest
 hard:
+info: LIVE_FRONTMATTER_CHANGED

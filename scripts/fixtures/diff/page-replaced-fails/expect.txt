@@ -1,0 +1,3 @@
+exit: 1
+class: ingest
+hard: PAGE_REPLACED
