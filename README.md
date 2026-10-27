@@ -1,6 +1,6 @@
 # ai-agents-second-wiki-brain
 
-A lean, modular, cited public second brain for AI agents: a growing wiki of everything non-private an agent or person should know (tools, methods, protocols, frameworks, reference, rules, notes) plus shared agent skills, written so that people and agents can both read it and check it.
+A lean, modular, cited public second brain for AI agents: a growing wiki of everything non-private an agent or person should know (tools, methods, protocols, frameworks, reference) plus shared agent skills, written so that people and agents can both read it and check it.
 
 Each page summarizes one tool or method in short, plain prose. Each claim on a page points to a raw citation record, and each raw record keeps the source URL, the retrieval date, the licence note, a content hash, and a web archive link. A reader can follow any claim back to the source it came from.
 
@@ -22,7 +22,7 @@ At commit `dfcc825` the wiki has 40 pages and 44 raw records. Three pages are `l
 | `wiki/entities/` | `tool` | One page per tool, such as Claude Code, Codex, Ollama, vLLM, Docker, and Tailscale |
 | `wiki/concepts/` | `method` | Methods and patterns, such as the LLM-wiki pattern |
 | `wiki/synthesis/` | `synthesis` | Pages that compare several sources |
-| `wiki/protocols/`, `frameworks/`, `references/`, `rules/`, `notes/` | `protocol`, `framework`, `reference`, `rule`, `note` | Added kinds; the list lives in `scripts/kinds.txt` and can grow |
+| `wiki/protocols/`, `frameworks/`, `references/` | `protocol`, `framework`, `reference` | Added kinds; the list lives in `scripts/kinds.txt` and can grow. Folders exist only once a page needs them |
 | `wiki/archive/` | any | Retired pages (none yet) |
 | `wiki/log/` | n/a | One log file per ingest |
 | `raw/` | n/a | One citation record per source, named `YYYY-MM-DD-<slug>.md` |
@@ -56,7 +56,8 @@ tool_version: v0.31.0
 
 - `sources` holds one or more `<raw-slug> @ <heading|page|line>` entries.
 - `tool_version` is required for `type: tool` and forbidden for other types.
-- Optional `tier: core` marks key knowledge; `tier: volatile` plus `review_by: YYYY-MM-DD` marks fast-changing facts that need a re-check by that date.
+- Optional `tier: core` marks key knowledge; `tier: volatile` plus `review_by: YYYY-MM-DD` marks fast-changing facts that need a re-check by that date. Optional `confidence: high|medium` records source strength.
+- For agents: `py -I scripts/lint.py --root . --exports out/` writes `llms.txt` and `index.json` (scope, per-page type, status, tier, review date, confidence).
 - Links between pages use `[[slug]]`. Slugs use only `a-z`, `0-9`, and `-`, and are unique across all sections.
 - Every page has a `## Disagreements` section, and tool pages also have `## Limits`. Conflicting claims sit side by side and are marked `[CONFLICT]`.
 

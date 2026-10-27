@@ -14,6 +14,7 @@ import sys
 import tempfile
 import unicodedata
 from collections import namedtuple
+from datetime import datetime
 
 Finding = namedtuple("Finding", "level code path line msg")
 HARD, WARN, INFO = "HARD", "WARN", "INFO"
@@ -57,14 +58,27 @@ RESERVED_SLUGS = ("index", "log")  # wiki/index.md and wiki/log/ own these names
 
 
 def _load_kinds():
-    """Read scripts/kinds.txt next to this file: '<kind> <folder>' per line, '#' comments."""
+    """Read scripts/kinds.txt next to this file: '<kind> <folder>' per line, '#' comments. Fails closed."""
     here = os.path.dirname(os.path.abspath(__file__))
-    kinds = []
+    reserved = ("draft", "superseded", "unclassified", "archive", "log", "index")  # index groups and built-in names
+    kinds, seen_k, seen_f = [], set(), set()
     with open(os.path.join(here, "kinds.txt"), encoding="utf-8") as fh:
-        for ln in fh:
-            ln = ln.split("#", 1)[0].split()
-            if len(ln) == 2 and SLUG_RE.match(ln[0]) and SLUG_RE.match(ln[1]):
-                kinds.append((ln[0], ln[1]))
+        for n, raw in enumerate(fh, 1):
+            parts = raw.split("#", 1)[0].split()
+            if not parts:
+                continue
+            if len(parts) != 2 or not SLUG_RE.match(parts[0]) or not SLUG_RE.match(parts[1]):
+                raise ValueError("kinds.txt line %d: want '<kind> <folder>' with [a-z0-9-]" % n)
+            kind, folder = parts
+            if kind in reserved or folder in reserved:
+                raise ValueError("kinds.txt line %d: %s is reserved" % (n, kind if kind in reserved else folder))
+            if kind in seen_k or folder in seen_f:
+                raise ValueError("kinds.txt line %d: duplicate kind or folder" % n)
+            seen_k.add(kind)
+            seen_f.add(folder)
+            kinds.append((kind, folder))
+    if not kinds:
+        raise ValueError("kinds.txt has no kinds")
     return kinds
 
 
@@ -73,7 +87,16 @@ PAGE_TYPES = tuple(k for k, _ in _KINDS)
 SECTIONS = tuple(sorted(set(f for _, f in _KINDS))) + ("archive",)  # wiki/<section>/<slug>.md, exactly one level
 TYPE_SECTION = dict(_KINDS)  # archive/ takes any type
 TIERS = ("core", "volatile")
+CONFIDENCE = ("high", "medium")  # high: official docs or releases of the project; medium: attributed practitioner source
 REVIEW_BY_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+REVIEW_FAR_DAYS = 400  # a volatile page should be re-checked within about a year
+
+
+def _valid_date(s):
+    try:
+        return datetime.strptime(s, "%Y-%m-%d").date()
+    except ValueError:
+        return None
 RAW_KINDS = ("web", "pdf", "book")
 ARCHIVE_STATUS = ("saved", "failed", "excluded", "none")
 READ_VIA = ("raw", "extract", "browser-render", "pdf-text")
@@ -275,8 +298,11 @@ def check_page(doc, tree, add):
     rby = scalar(doc, "review_by")
     if (tier == "volatile") != bool(rby):
         add(HARD, "FM_REVIEW_BY", rel, 0, "review_by (YYYY-MM-DD) required iff tier is volatile")
-    elif rby and not REVIEW_BY_RE.match(rby):
-        add(HARD, "FM_REVIEW_BY", rel, doc.keyline.get("review_by", 0), "review_by must be YYYY-MM-DD")
+    elif rby and (not REVIEW_BY_RE.match(rby) or _valid_date(rby) is None):
+        add(HARD, "FM_REVIEW_BY", rel, doc.keyline.get("review_by", 0), "review_by must be a real date, YYYY-MM-DD")
+    conf = scalar(doc, "confidence")
+    if conf is not None and conf not in CONFIDENCE:
+        add(HARD, "FM_CONFIDENCE", rel, doc.keyline.get("confidence", 0), "confidence must be high or medium (or omitted)")
     status = scalar(doc, "status")
     if status is not None:
         line = doc.raw_line("status")
@@ -554,8 +580,12 @@ def check_warnings(tree, add, deny_given):
         if upd is not None and upd > now:
             add(WARN, "DATE_FUTURE", d.rel, d.keyline.get("updated", 0), "updated is in the future")
         rby = fm.get("review_by") if isinstance(fm.get("review_by"), str) else ""
-        if fm.get("tier") == "volatile" and REVIEW_BY_RE.match(rby) and rby < now.strftime("%Y-%m-%d"):
-            add(WARN, "REVIEW_OVERDUE", d.rel, d.keyline.get("review_by", 0), "volatile page is past its review_by date")
+        rdate = _valid_date(rby) if REVIEW_BY_RE.match(rby) else None
+        if fm.get("tier") == "volatile" and rdate is not None:
+            if rdate < now.date():
+                add(WARN, "REVIEW_OVERDUE", d.rel, d.keyline.get("review_by", 0), "volatile page is past its review_by date")
+            elif (rdate - now.date()).days > REVIEW_FAR_DAYS:
+                add(WARN, "REVIEW_FAR", d.rel, d.keyline.get("review_by", 0), "review_by is more than %d days away" % REVIEW_FAR_DAYS)
         for n, ln in body_lines(d):
             for m in MDLINK_RE.finditer(ln):
                 if "://" not in m.group(1) and os.path.basename(m.group(1))[:-3] in slugs:
@@ -641,6 +671,33 @@ def build_index(tree):
         if groups[g]:
             out += ["## " + g, ""] + [ln for _, ln in sorted(groups[g])] + [""]
     return "\n".join(out).rstrip("\n") + "\n"
+
+
+def build_exports(tree, as_of):
+    """Machine-readable entry points for agents: (llms_txt, index_json). Generated on demand, never committed."""
+    import json
+    pages = []
+    for d in sorted(tree.pages, key=lambda x: stem(x.rel)):
+        fm = d.fm or {}
+
+        def g(k):
+            v = fm.get(k)
+            return v if isinstance(v, str) else None
+        pages.append({"slug": stem(d.rel), "title": g("title"), "type": g("type"), "status": g("status"),
+                      "tier": g("tier"), "review_by": g("review_by"), "confidence": g("confidence"),
+                      "updated": g("updated"), "path": d.rel, "sources": len(fm.get("sources", [])) if isinstance(fm.get("sources"), list) else 0})
+    scope = {"covers": [k for k, _ in _KINDS] + ["skills"],
+             "not_covered": "private material of the owner (people, health, accounts, machines, keys, plans)",
+             "current_as_of": as_of,
+             "read_rule": "pin a commit SHA; skip status draft and superseded unless asked; cite pages you opened; else answer 'not in wiki'"}
+    ij = json.dumps({"scope": scope, "pages": pages}, indent=1, ensure_ascii=False) + "\n"
+    lines = ["# ai-agents-wiki-second-brain", "",
+             "> Public second brain for AI agents. Pin a commit SHA, read index.json first, open only matching pages.",
+             "", "Covers: " + ", ".join(scope["covers"]), "Not covered: " + scope["not_covered"], "Current as of: " + as_of, "", "## Pages", ""]
+    for p in pages:
+        meta = ", ".join(x for x in (p["type"], p["status"], p["tier"], p["confidence"]) if x)
+        lines.append("- [%s](%s): %s" % (p["title"] or p["slug"], p["path"], meta))
+    return "\n".join(lines) + "\n", ij
 
 
 def run_checks(root, deny_file=None):
@@ -795,6 +852,7 @@ def main(argv=None):
     ap.add_argument("--selftest", action="store_true")
     ap.add_argument("--index", action="store_true", help="generate wiki/index.md")
     ap.add_argument("--stdout", action="store_true", help="with --index: print instead of writing")
+    ap.add_argument("--exports", metavar="DIR", help="write llms.txt and index.json (machine-readable, not committed) into DIR")
     args = ap.parse_args(argv)
     try:
         if hasattr(sys.stdout, "reconfigure"):
@@ -806,6 +864,13 @@ def main(argv=None):
         if not os.path.isdir(args.root):
             print("lint: root not found: " + args.root, file=sys.stderr)
             return 2
+        if args.exports:
+            os.makedirs(args.exports, exist_ok=True)
+            txt, js = build_exports(Tree(args.root), datetime.now().strftime("%Y-%m-%d"))
+            for name, data in (("llms.txt", txt), ("index.json", js)):
+                with open(os.path.join(args.exports, name), "wb") as f:
+                    f.write(data.encode("utf-8"))
+            return 0
         if args.index:
             data = build_index(Tree(args.root)).encode("utf-8")
             if args.stdout:
