@@ -54,9 +54,26 @@ ALLOWED_EXAMPLES = ("AKIA" + "IOSFODNN7EXAMPLE", "wJalrXUtnFEMI/K7MDENG/" + "bPx
 PAGE_REQUIRED = ("title", "type", "sources", "updated", "status")
 OS_JUNK = ("Thumbs.db", "desktop.ini", ".DS_Store")  # local OS files, git-ignored, skipped by the tree walk
 RESERVED_SLUGS = ("index", "log")  # wiki/index.md and wiki/log/ own these names
-PAGE_TYPES = ("tool", "method", "synthesis")
-SECTIONS = ("concepts", "entities", "synthesis", "archive")  # wiki/<section>/<slug>.md, exactly one level
-TYPE_SECTION = {"tool": "entities", "method": "concepts", "synthesis": "synthesis"}  # archive/ takes any type
+
+
+def _load_kinds():
+    """Read scripts/kinds.txt next to this file: '<kind> <folder>' per line, '#' comments."""
+    here = os.path.dirname(os.path.abspath(__file__))
+    kinds = []
+    with open(os.path.join(here, "kinds.txt"), encoding="utf-8") as fh:
+        for ln in fh:
+            ln = ln.split("#", 1)[0].split()
+            if len(ln) == 2 and SLUG_RE.match(ln[0]) and SLUG_RE.match(ln[1]):
+                kinds.append((ln[0], ln[1]))
+    return kinds
+
+
+_KINDS = _load_kinds()
+PAGE_TYPES = tuple(k for k, _ in _KINDS)
+SECTIONS = tuple(sorted(set(f for _, f in _KINDS))) + ("archive",)  # wiki/<section>/<slug>.md, exactly one level
+TYPE_SECTION = dict(_KINDS)  # archive/ takes any type
+TIERS = ("core", "volatile")
+REVIEW_BY_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 RAW_KINDS = ("web", "pdf", "book")
 ARCHIVE_STATUS = ("saved", "failed", "excluded", "none")
 READ_VIA = ("raw", "extract", "browser-render", "pdf-text")
@@ -245,13 +262,21 @@ def check_page(doc, tree, add):
             add(HARD, "FM_FIELD_MISSING", rel, 0, "missing required field " + k)
     ptype = scalar(doc, "type")
     if ptype is not None and ptype not in PAGE_TYPES:
-        add(HARD, "FM_TYPE", rel, doc.keyline.get("type", 0), "type must be tool, method or synthesis")
+        add(HARD, "FM_TYPE", rel, doc.keyline.get("type", 0), "type must be one of: " + ", ".join(PAGE_TYPES) + " (see scripts/kinds.txt)")
     parts = rel.split("/")
     if len(parts) == 3 and parts[1] in TYPE_SECTION.values() and ptype in TYPE_SECTION \
             and TYPE_SECTION[ptype] != parts[1]:
         add(HARD, "SECTION_TYPE", rel, 0, "type %s belongs in %s/ (archive/ takes any type)" % (ptype, TYPE_SECTION[ptype]))
     if (ptype == "tool") != bool(scalar(doc, "tool_version")):
         add(HARD, "FM_TOOL_VERSION", rel, 0, "tool_version required iff type is tool")
+    tier = scalar(doc, "tier")
+    if tier is not None and tier not in TIERS:
+        add(HARD, "FM_TIER", rel, doc.keyline.get("tier", 0), "tier must be core or volatile (or omitted)")
+    rby = scalar(doc, "review_by")
+    if (tier == "volatile") != bool(rby):
+        add(HARD, "FM_REVIEW_BY", rel, 0, "review_by (YYYY-MM-DD) required iff tier is volatile")
+    elif rby and not REVIEW_BY_RE.match(rby):
+        add(HARD, "FM_REVIEW_BY", rel, doc.keyline.get("review_by", 0), "review_by must be YYYY-MM-DD")
     status = scalar(doc, "status")
     if status is not None:
         line = doc.raw_line("status")
@@ -528,6 +553,9 @@ def check_warnings(tree, add, deny_given):
         upd = _parse_iso(fm.get("updated", "")) if isinstance(fm.get("updated"), str) else None
         if upd is not None and upd > now:
             add(WARN, "DATE_FUTURE", d.rel, d.keyline.get("updated", 0), "updated is in the future")
+        rby = fm.get("review_by") if isinstance(fm.get("review_by"), str) else ""
+        if fm.get("tier") == "volatile" and REVIEW_BY_RE.match(rby) and rby < now.strftime("%Y-%m-%d"):
+            add(WARN, "REVIEW_OVERDUE", d.rel, d.keyline.get("review_by", 0), "volatile page is past its review_by date")
         for n, ln in body_lines(d):
             for m in MDLINK_RE.finditer(ln):
                 if "://" not in m.group(1) and os.path.basename(m.group(1))[:-3] in slugs:
@@ -588,7 +616,7 @@ def _esc(s):
 
 def build_index(tree):
     """Deterministic index: grouped by type/status, sorted by slug, LF, no timestamp."""
-    order = ("tool", "method", "synthesis", "draft", "superseded", "unclassified", "archive")
+    order = PAGE_TYPES + ("draft", "superseded", "unclassified", "archive")
     groups = {g: [] for g in order}
     for d in tree.pages:
         fm, slug = d.fm or {}, stem(d.rel)
