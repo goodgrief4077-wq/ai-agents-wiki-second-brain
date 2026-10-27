@@ -27,10 +27,11 @@ SKILL_PATH_RE = re.compile(r"^skills/[a-z0-9-]+/(SKILL|[a-z0-9.-]+)\.md$")
 RAW_NEW_RE = re.compile(r"^(\d{2})-(\d{2})-(\d{2})-(\d{4})-")
 # skills/**: sanitized, agent-neutral copies; only <placeholder> forms may stand for private details.
 SKILL_PRIVATE_RES = (
-    ("local path", re.compile(r"(?<![A-Za-z])[A-Za-z]:[\\/]|/home/|/Users/")),
+    ("local path", re.compile(r"(?<![A-Za-z])[A-Za-z]:[\\/]|/home/|/Users/|/root/|/mnt/[A-Za-z]|(?<![A-Za-z0-9~])~[a-z][a-z0-9_-]*/|\\\\[A-Za-z0-9_.-]+\\[A-Za-z0-9$]")),
     ("mail address", re.compile(r"[A-Za-z0-9._+-]+@[A-Za-z0-9-]+\.[A-Za-z]{2,}")),
     ("IPv4 address or 4-part version (write v1.2.3.4 as 1.2.3)", re.compile(r"(?<![\d.])\d{1,3}(\.\d{1,3}){3}(?![\d.])")),
-    ("owner title", re.compile(r"\bSir\b")),
+    ("owner title", re.compile(r"\b[Ss]ir\b")),
+    ("private IPv6 or tailnet name", re.compile(r"(?i)(?<![0-9a-f:])(fd[0-9a-f]{2}|fe80):[0-9a-f:]{2,}|\b[a-z0-9-]+\.ts\.net\b")),
     # Windows-path shape only: two or more plain segments, or a <placeholder> prefix. Regex escapes like \b or \d pass.
     ("backslash path", re.compile(r"[A-Za-z0-9_>]\\[A-Za-z0-9_<][A-Za-z0-9_ .<>-]*\\[A-Za-z0-9_<]|<[a-z-]+>\\")),
 )
@@ -48,6 +49,13 @@ SECRET_RES = (
     re.compile(r"(?<![A-Za-z0-9])ghp_[A-Za-z0-9]{20,}"),
     re.compile(r"(?<![A-Za-z0-9])AKIA[0-9A-Z]{16}"),
     re.compile(r"-----BEGIN [A-Z ]*PRIVATE KEY-----"),
+    re.compile(r"(?<![A-Za-z0-9])github_pat_[A-Za-z0-9_]{20,}"),
+    re.compile(r"(?<![A-Za-z0-9])gh[ousr]_[A-Za-z0-9]{20,}"),
+    re.compile(r"(?<![A-Za-z0-9])xox[abeprs]-[A-Za-z0-9-]{10,}"),
+    re.compile(r"(?<![A-Za-z0-9])AIza[0-9A-Za-z_-]{35}"),
+    re.compile(r"(?<![A-Za-z0-9])glpat-[A-Za-z0-9_-]{20,}"),
+    re.compile(r"(?<![A-Za-z0-9])hf_[A-Za-z0-9]{30,}"),
+    re.compile(r"(?<![A-Za-z0-9_-])eyJ[A-Za-z0-9_-]{15,}\.eyJ[A-Za-z0-9_-]{15,}\.[A-Za-z0-9_-]{10,}"),
 )
 # Documented example values only. This is not a suppression marker.
 ALLOWED_EXAMPLES = ("AKIA" + "IOSFODNN7EXAMPLE", "wJalrXUtnFEMI/K7MDENG/" + "bPxRfiCYEXAMPLEKEY")  # split: secret scanners flag the literal
@@ -312,7 +320,7 @@ def check_page(doc, tree, add):
             add(HARD, "FM_STATUS_FORM", rel, doc.keyline["status"], "status line must be canonical: 'status: <value>'")
     upd = scalar(doc, "updated")
     if upd is not None:
-        if not ISO_RE.match(upd):
+        if not _valid_iso(upd):
             add(HARD, "FM_UPDATED", rel, doc.keyline["updated"], "updated must be ISO with offset")
         elif not UPDATED_LINE_RE.match(doc.raw_line("updated")):
             add(HARD, "FM_UPDATED", rel, doc.keyline["updated"], "updated line must be canonical, unquoted")
@@ -375,7 +383,7 @@ def check_raw(doc, add):
         if not scalar(doc, k):
             add(HARD, "RAW_FIELD", rel, 0, "missing required field " + k)
     ret = scalar(doc, "retrieved")
-    if ret and not ISO_RE.match(ret):
+    if ret and not _valid_iso(ret):
         add(HARD, "RAW_FIELD", rel, doc.keyline["retrieved"], "retrieved must be ISO with offset")
     arch = scalar(doc, "archive_status")
     if arch and arch not in ARCHIVE_STATUS:
@@ -772,6 +780,20 @@ def build_exports(tree, as_of):
     return "\n".join(lines) + "\n", ij
 
 
+def _valid_iso(s):
+    """ISO form AND a real calendar date and clock time (2026-13-45T99:99+09:00 is not)."""
+    if not ISO_RE.match(s):
+        return False
+    try:
+        datetime.strptime(s[:16], "%Y-%m-%dT%H:%M")
+        if s[16:17] == ":" and int(s[17:19]) > 59:
+            return False
+        tz = re.search(r"([+-])(\d{2}):(\d{2})$", s)
+        return not tz or (int(tz.group(2)) <= 14 and int(tz.group(3)) <= 59)
+    except ValueError:
+        return False
+
+
 def run_checks(root, deny_file=None):
     tree = Tree(root)
     out = list(tree.findings)
@@ -823,6 +845,9 @@ _TOKENS = {  # fake secrets are built at runtime, never stored as literals
     "@@AKIA@@": "AKIA" + "QWERTYUIOPASDFGH",
     "@@GHP@@": "ghp_" + "a" * 30,
     "@@SK@@": "sk-" + "b" * 30,
+    "@@GHPAT@@": "github_pat_" + "c" * 30,
+    "@@HF@@": "hf_" + "d" * 34,
+    "@@JWT@@": "eyJ" + "a" * 20 + ".eyJ" + "b" * 20 + "." + "c" * 20,
     "@@PEM@@": "-----BEGIN RSA PRIVATE" + " KEY-----",
     "@@AKIA_EXAMPLE@@": "AKIA" + "IOSFODNN7EXAMPLE",
 }
