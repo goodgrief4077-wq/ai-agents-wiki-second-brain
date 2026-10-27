@@ -8,8 +8,7 @@ sources:
   - 26-10-24-1347-pnpm-build-settings @ strictDepBuilds
   - 26-10-24-1346-mise-settings @ npm.package_manager
   - 26-10-24-1346-claude-code-hooks @ Exit code 2 behavior per event
-  - 26-10-27-1138-wiki-pr52-page-tiers @ description
-updated: 2026-10-27T11:40:00+09:00
+updated: 2026-10-24T13:49:07+09:00
 status: draft
 tier: core
 ---

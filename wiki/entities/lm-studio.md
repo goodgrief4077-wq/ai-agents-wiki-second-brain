@@ -6,11 +6,10 @@ aliases:
 sources:
   - 2026-10-11-lm-studio @ page
   - 2026-10-12-lm-studio-releases @ releases
-  - 26-10-27-1138-wiki-pr52-page-tiers @ description
-updated: 2026-10-27T11:40:00+09:00
+updated: 2026-10-12T09:26:58+09:00
 status: draft
 tier: volatile
-review_by: 2027-01-25
+review_by: 2027-02-02
 tool_version: unreleased
 ---
 lmstudio-js is LM Studio's official TypeScript SDK for driving locally run models from JavaScript and Node code.

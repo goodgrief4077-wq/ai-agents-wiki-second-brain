@@ -4,11 +4,10 @@ type: tool
 sources:
   - 2026-10-11-buzz @ page
   - 2026-10-12-buzz-releases @ releases
-  - 26-10-27-1138-wiki-pr52-page-tiers @ description
-updated: 2026-10-27T11:40:00+09:00
+updated: 2026-10-12T09:09:17+09:00
 status: draft
 tier: volatile
-review_by: 2027-01-25
+review_by: 2027-01-14
 tool_version: desktop-v0.5.28
 ---
 Buzz is Block's self-hostable workspace where people and AI agents work in the same rooms on a relay you own.

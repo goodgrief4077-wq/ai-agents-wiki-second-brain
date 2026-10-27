@@ -4,11 +4,10 @@ type: tool
 sources:
   - 26-10-24-1345-agent-browser @ README
   - 26-10-24-1345-agent-browser-releases @ releases
-  - 26-10-27-1138-wiki-pr52-page-tiers @ description
-updated: 2026-10-27T11:40:00+09:00
+updated: 2026-10-24T13:49:07+09:00
 status: draft
 tier: volatile
-review_by: 2027-01-25
+review_by: 2027-01-11
 tool_version: 0.39.2
 ---
 agent-browser is a browser automation command-line tool from Vercel Labs, built for AI agents to drive a real Chrome or Chromium browser.

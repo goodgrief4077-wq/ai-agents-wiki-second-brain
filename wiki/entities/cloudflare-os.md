@@ -4,11 +4,10 @@ type: tool
 sources:
   - 2026-10-11-cloudflare-os @ page
   - 2026-10-12-cloudflare-os-releases @ releases
-  - 26-10-27-1138-wiki-pr52-page-tiers @ description
-updated: 2026-10-27T11:40:00+09:00
+updated: 2026-10-12T09:09:31+09:00
 status: draft
 tier: volatile
-review_by: 2027-01-25
+review_by: 2027-01-16
 tool_version: unreleased
 ---
 Cloudflare OS is an open-source agent workspace on Cloudflare Workers, built around sandboxed per-user apps and a capability-based security layer.

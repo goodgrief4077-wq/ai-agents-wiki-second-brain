@@ -5,8 +5,7 @@ sources:
   - 2026-10-11-compvis-stable-diffusion @ page
   - 2026-10-11-stability-generative-models @ page
   - 2026-10-11-diffusers @ page
-  - 26-10-27-1138-wiki-pr52-page-tiers @ description
-updated: 2026-10-27T11:40:00+09:00
+updated: 2026-10-11T16:07:52+09:00
 status: draft
 tier: core
 ---
