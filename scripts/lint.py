@@ -718,6 +718,33 @@ def build_index(tree):
     return "\n".join(out).rstrip("\n") + "\n"
 
 
+def _load_scope():
+    """Read scripts/scope.txt: 'key: value' lines, '#' comments. Fails closed."""
+    here = os.path.dirname(os.path.abspath(__file__))
+    scope = {}
+    with open(os.path.join(here, "scope.txt"), encoding="utf-8") as fh:
+        for raw in fh:
+            line = raw.split("#", 1)[0].strip() if not raw.lstrip().startswith("#") else ""
+            key, sep, val = line.partition(":")
+            if line and (not sep or key.strip() not in ("not_covered", "read_rule") or not val.strip()):
+                raise ValueError("scope.txt: want 'not_covered: ...' and 'read_rule: ...' lines")
+            if line:
+                scope[key.strip()] = val.strip()
+    if set(scope) != {"not_covered", "read_rule"}:
+        raise ValueError("scope.txt needs both not_covered and read_rule")
+    return scope
+
+
+def check_scope_drift(root, add):
+    """AGENTS.md must state the same not-covered list as scripts/scope.txt (the parenthesised part)."""
+    text = read_text(os.path.join(root, "AGENTS.md"))
+    if text is None:
+        return
+    m = re.search(r"\(([^)]*)\)", _load_scope()["not_covered"])
+    if m and m.group(1) not in text:
+        add(WARN, "SCOPE_DRIFT", "AGENTS.md", 0, "AGENTS.md does not state the not-covered list from scripts/scope.txt")
+
+
 def build_exports(tree, as_of):
     """Machine-readable entry points for agents: (llms_txt, index_json). Generated on demand, never committed."""
     import json
@@ -732,9 +759,9 @@ def build_exports(tree, as_of):
                       "tier": g("tier"), "review_by": g("review_by"), "confidence": g("confidence"),
                       "updated": g("updated"), "path": d.rel, "sources": len(fm.get("sources", [])) if isinstance(fm.get("sources"), list) else 0})
     scope = {"covers": [k for k, _ in _KINDS] + ["skills"],
-             "not_covered": "private material of the owner (people, health, accounts, machines, keys, plans)",
+             "not_covered": _load_scope()["not_covered"],
              "current_as_of": as_of,
-             "read_rule": "pin a commit SHA; skip status draft and superseded unless asked; cite pages you opened; else answer 'not in wiki'"}
+             "read_rule": _load_scope()["read_rule"]}
     ij = json.dumps({"scope": scope, "pages": pages}, indent=1, ensure_ascii=False) + "\n"
     lines = ["# ai-agents-wiki-second-brain", "",
              "> Public second brain for AI agents. Pin a commit SHA, read index.json first, open only matching pages.",
@@ -766,6 +793,7 @@ def run_checks(root, deny_file=None):
     check_duplicates(tree, add)
     check_skills(tree.root, add)
     check_private(tree, add)
+    check_scope_drift(tree.root, add)
     docs = scan_files(tree)
     for d in docs:
         check_secrets(d, add)
