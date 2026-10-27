@@ -440,6 +440,51 @@ def check_skills(root, add):
                         kind + " in skills/ (use a <placeholder>; value not printed)")
 
 
+RESERVED_MAIL_RE = re.compile(r"@(example\.(com|org|net)|[a-z0-9.-]+\.(test|invalid|example))$", re.I)
+QUAD_RE = re.compile(r"(?<![\d.])(\d{1,3}(?:\.\d{1,3}){3})(?![\d.])")
+MAIL_RE = SKILL_PRIVATE_RES[1][1]
+
+
+def _private_ip(quad):
+    """HARD for private, CGNAT (Tailscale) and link-local ranges; loopback and public-looking quads are WARN."""
+    import ipaddress
+    try:
+        ip = ipaddress.ip_address(quad)
+    except ValueError:
+        return False
+    cgnat = ipaddress.ip_network("100.64.0.0/10")
+    return (ip.is_private and not ip.is_loopback) or ip in cgnat or ip.is_link_local
+
+
+def check_private(tree, add):
+    """wiki/ and raw/ are public: no private detail. Names and handles still need --deny-file."""
+    for d in tree.pages + tree.raws + tree.logs:
+        zone = "log" if d.rel.startswith("wiki/log/") else "wiki" if d.rel.startswith("wiki/") else "raw"
+        for i, ln in enumerate(d.lines):
+            for kind, rx in SKILL_PRIVATE_RES:
+                if kind.startswith("IPv4"):
+                    continue
+                if kind == "mail address":
+                    if not any(not RESERVED_MAIL_RE.search(m.group(0)) for m in MAIL_RE.finditer(ln)):
+                        continue
+                elif not rx.search(ln):
+                    continue
+                if kind == "owner title" and zone == "log":
+                    add(WARN, "PRIVATE_OWNER_LOG", d.rel, i + 1, "owner title in a log file (legacy; value not printed)")
+                else:
+                    add(HARD, "PRIVATE", d.rel, i + 1,
+                        kind + " in " + zone + "/ (use a <placeholder>; value not printed; raw/ is add-only, so fix before merge)")
+            if ln.startswith("tool_version:"):
+                continue
+            for m in QUAD_RE.finditer(ln):
+                if ln[max(0, m.start() - 1):m.start()].lower() == "v":
+                    continue
+                if _private_ip(m.group(1)):
+                    add(HARD, "PRIVATE", d.rel, i + 1, "private IPv4 address in " + zone + "/ (value not printed)")
+                else:
+                    add(WARN, "PRIVATE_QUAD", d.rel, i + 1, "4-part number: version or address? (value not printed)")
+
+
 def scan_files(tree):
     """Docs scanned for secrets and deny keywords: wiki/, raw/, skills/ and AGENTS.md."""
     docs = tree.pages + tree.logs + tree.raws + skill_docs(tree.root)
@@ -626,7 +671,7 @@ def check_warnings(tree, add, deny_given):
     if idx != build_index(tree) and (tree.pages or idx is not None):
         add(INFO, "INDEX_STALE", "wiki/index.md", 0, "index differs from generated output (never fails)")
     if not deny_given:
-        add(WARN, "DENY_SKIPPED", "-", 0, "no local deny file given: personal names and handles are not checked (pass --deny-file)")
+        add(WARN, "DENY_SKIPPED", "-", 0, "no local deny file given: personal names and handles are not checked (paths, mail and IPs are; pass --deny-file)")
 
 
 _ESC_DROP = set("[]()<>!|`" + chr(92))
@@ -720,6 +765,7 @@ def run_checks(root, deny_file=None):
         check_raw(d, add)
     check_duplicates(tree, add)
     check_skills(tree.root, add)
+    check_private(tree, add)
     docs = scan_files(tree)
     for d in docs:
         check_secrets(d, add)
