@@ -101,7 +101,7 @@ def is_page(p):
 
 
 def only_status_lines(root, mb, path, new_text, env):
-    """True iff every changed line of `path` is a frontmatter status:/updated: line."""
+    """True iff every changed line of `path` is a frontmatter status:/updated:/review_by:/confidence: line (FLIP_LINE_RE)."""
     out = git(root, "diff", "-U0", "--no-color", mb, "HEAD", "--", path, env=env)
     _, fm_end = read_status(new_text)
     seen, ok = False, True
