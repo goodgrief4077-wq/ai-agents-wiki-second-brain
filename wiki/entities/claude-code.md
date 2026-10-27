@@ -4,11 +4,10 @@ type: tool
 sources:
   - 2026-10-11-claude-code @ page
   - 2026-10-12-claude-code-releases @ releases
-  - 26-10-27-1138-wiki-pr52-page-tiers @ description
-updated: 2026-10-27T11:40:00+09:00
+updated: 2026-10-12T09:09:24+09:00
 status: draft
 tier: volatile
-review_by: 2027-01-25
+review_by: 2027-01-15
 tool_version: 2.1.296
 ---
 Claude Code is Anthropic's agentic coding tool for the terminal, described on its GitHub front page.

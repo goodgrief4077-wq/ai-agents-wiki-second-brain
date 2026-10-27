@@ -5,11 +5,10 @@ sources:
   - 2026-10-11-prime-agent @ page
   - 2026-10-12-prime-agent-releases @ releases
   - 2026-10-12-prime-agent-licence @ LICENSE
-  - 26-10-27-1138-wiki-pr52-page-tiers @ description
-updated: 2026-10-27T11:40:00+09:00
+updated: 2026-10-12T09:26:58+09:00
 status: draft
 tier: volatile
-review_by: 2027-01-25
+review_by: 2027-02-12
 tool_version: v0.10.0
 ---
 Prime Agent is Prime Intellect's open-source coding and research agent, built on a Recursive Language Model harness with durable, self-refining state.

@@ -28,8 +28,7 @@ sources:
   - 2026-10-13-webdev-simplified-ai-skills @ 22:34
   - 2026-10-13-webdev-simplified-ai-skills @ 26:33
   - 2026-10-13-webdev-simplified-ai-skills @ 26:58
-  - 26-10-27-1138-wiki-pr52-page-tiers @ description
-updated: 2026-10-27T11:40:00+09:00
+updated: 2026-10-13T14:25:00+09:00
 status: live
 tier: core
 ---

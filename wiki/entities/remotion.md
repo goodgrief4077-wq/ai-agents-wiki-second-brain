@@ -5,11 +5,10 @@ sources:
   - 2026-10-11-remotion @ page
   - 2026-10-12-remotion-releases @ releases
   - 2026-10-12-remotion-licence @ LICENSE
-  - 26-10-27-1138-wiki-pr52-page-tiers @ description
-updated: 2026-10-27T11:40:00+09:00
+updated: 2026-10-12T09:26:58+09:00
 status: draft
 tier: volatile
-review_by: 2027-01-25
+review_by: 2027-02-15
 tool_version: v4.0.534
 ---
 Remotion is a React-based framework for creating and rendering videos with code, under a special licence.

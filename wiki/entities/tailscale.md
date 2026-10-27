@@ -5,11 +5,10 @@ sources:
   - 2026-10-11-tailscale-docs-what-is-tailscale @ page
   - 2026-10-11-github-tailscale-tailscale @ page
   - 2026-10-12-tailscale-releases @ releases
-  - 26-10-27-1138-wiki-pr52-page-tiers @ description
-updated: 2026-10-27T11:40:00+09:00
+updated: 2026-10-12T09:12:40+09:00
 status: draft
 tier: volatile
-review_by: 2027-01-25
+review_by: 2027-02-17
 tool_version: v1.104.1
 ---
 Tailscale is a WireGuard-based connectivity service that links devices into a private peer-to-peer network called a tailnet.

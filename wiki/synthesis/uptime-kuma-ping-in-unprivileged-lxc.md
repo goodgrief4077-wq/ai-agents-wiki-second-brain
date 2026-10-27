@@ -4,8 +4,7 @@ type: synthesis
 sources:
   - 26-10-26-1125-proxmox-lxc-unprivileged-ping @ thread
   - 26-10-26-1125-uptime-kuma @ README
-  - 26-10-27-1138-wiki-pr52-page-tiers @ description
-updated: 2026-10-27T11:40:00+09:00
+updated: 2026-10-26T11:31:09+09:00
 status: draft
 tier: core
 ---

@@ -4,11 +4,10 @@ type: tool
 sources:
   - 2026-10-11-orca @ page
   - 2026-10-12-orca-releases @ releases
-  - 26-10-27-1138-wiki-pr52-page-tiers @ description
-updated: 2026-10-27T11:40:00+09:00
+updated: 2026-10-12T09:12:01+09:00
 status: draft
 tier: volatile
-review_by: 2027-01-25
+review_by: 2027-02-10
 tool_version: 1.4.224
 ---
 Orca is a desktop and mobile app for running a fleet of coding agents in parallel, each in an isolated git worktree.
