@@ -10,8 +10,7 @@ sources:
   - 2026-10-11-karpathy-llm-wiki-gist @ Operations
   - 2026-10-11-karpathy-llm-wiki-gist @ Indexing and logging
   - 2026-10-11-github-fivetaku-llm-wiki @ README
-  - 26-10-27-1138-wiki-pr52-page-tiers @ description
-updated: 2026-10-27T11:40:00+09:00
+updated: 2026-10-11T15:21:00+09:00
 status: draft
 tier: core
 ---

@@ -4,11 +4,10 @@ type: tool
 sources:
   - 2026-10-11-gbrain @ page
   - 2026-10-12-gbrain-releases @ releases
-  - 26-10-27-1138-wiki-pr52-page-tiers @ description
-updated: 2026-10-27T11:40:00+09:00
+updated: 2026-10-12T09:10:13+09:00
 status: draft
 tier: volatile
-review_by: 2027-01-25
+review_by: 2027-01-22
 tool_version: 0.60.175.0
 ---
 GBrain is a memory layer for AI agents, published by Garry Tan, that stores sourced facts and shares them across agents.

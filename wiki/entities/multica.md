@@ -5,11 +5,10 @@ sources:
   - 2026-10-11-multica @ page
   - 2026-10-12-multica-releases @ releases
   - 2026-10-12-multica-licence @ LICENSE
-  - 26-10-27-1138-wiki-pr52-page-tiers @ description
-updated: 2026-10-27T11:40:00+09:00
+updated: 2026-10-12T09:26:58+09:00
 status: draft
 tier: volatile
-review_by: 2027-01-25
+review_by: 2027-02-07
 tool_version: v0.6.1
 ---
 Multica is a source-available workspace for assigning issues to AI coding agents and reviewing their work, self-hostable on your own infrastructure.

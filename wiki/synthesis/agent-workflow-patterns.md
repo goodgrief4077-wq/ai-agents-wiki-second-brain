@@ -4,8 +4,7 @@ type: synthesis
 sources:
   - 2026-10-11-building-effective-agents @ page
   - 2026-10-11-claude-cookbooks-agent-patterns @ page
-  - 26-10-27-1138-wiki-pr52-page-tiers @ description
-updated: 2026-10-27T11:40:00+09:00
+updated: 2026-10-11T16:04:03+09:00
 status: draft
 tier: core
 ---

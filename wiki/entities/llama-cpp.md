@@ -4,11 +4,10 @@ type: tool
 sources:
   - 2026-10-11-llama-cpp @ page
   - 2026-10-12-llama-cpp-releases @ releases
-  - 26-10-27-1138-wiki-pr52-page-tiers @ description
-updated: 2026-10-27T11:40:00+09:00
+updated: 2026-10-12T09:10:56+09:00
 status: draft
 tier: volatile
-review_by: 2027-01-25
+review_by: 2027-02-01
 tool_version: v0.6.0
 ---
 llama.cpp is a dependency-free C/C++ project for running LLM inference on a wide range of hardware, with a CLI and an OpenAI-compatible server.
