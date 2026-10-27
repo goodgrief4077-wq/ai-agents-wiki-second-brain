@@ -129,6 +129,13 @@ def body_of(text):
     return "\n".join(lines[end:]) if end else text
 
 
+def frontmatter_of(text):
+    """Frontmatter lines without the updated: line (LF-normalised)."""
+    lines = text.replace("\r\n", "\n").split("\n")
+    _s, end = read_status(text)
+    return [ln for ln in lines[1:end - 1] if not ln.startswith("updated: ")] if end else []
+
+
 def old_blocks(text):
     """Lines of the '## Steps' block(s): after the heading up to the next # or ## heading."""
     lines, out, i = text.replace("\r\n", "\n").split("\n"), [], 0
@@ -214,6 +221,14 @@ def analyze(root, base, env=None):
         del pages
 
     deleted_pages = {os.path.basename(c.path): c.path for c in changes if c.status == "D" and is_page(c.path)}
+    added_names = {os.path.basename(c.path) for c in changes if c.status == "A" and is_page(c.path)}
+    for c in changes:
+        # history is never lost: a page leaves by moving to archive/ (same slug) or status: superseded
+        if c.status == "D" and is_page(c.path) and os.path.basename(c.path) not in added_names:
+            add(HARD, "PAGE_DELETED", c.path, 0,
+                "page deleted: move it to archive/ or set status: superseded, never delete")
+        if c.status == "D" and c.path.startswith("wiki/log/"):
+            add(HARD, "LOG_DELETED", c.path, 0, "ingest logs are add-only: do not delete")
     for c in changes:
         if not is_page(c.path) or c.new_mode == SYMLINK_MODE:
             continue  # symlinks already failed above; their "content" is a link target
@@ -253,6 +268,9 @@ def analyze(root, base, env=None):
             if read_status(new)[0] == "live" and body_of(old) != body_of(new):
                 add(INFO, "LIVE_BODY_CHANGED", c.path, 0,
                     "live page body changed: re-spot-check before it counts as live")
+            if read_status(new)[0] == "live" and frontmatter_of(old) != frontmatter_of(new):
+                add(INFO, "LIVE_FRONTMATTER_CHANGED", c.path, 0,
+                    "live page frontmatter changed (sources, tier, aliases...): read it before merging")
     if cls == "index":
         check_index_equal(root, env, add)
     if cls == "schema":
