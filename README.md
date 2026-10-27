@@ -25,7 +25,7 @@ The current page count and status mix are in `wiki/index.md`; scope and freshnes
 | `wiki/protocols/`, `frameworks/`, `references/` | `protocol`, `framework`, `reference` | Added kinds; the list lives in `scripts/kinds.txt` and can grow. Folders exist only once a page needs them |
 | `wiki/archive/` | any | Retired pages (none yet) |
 | `wiki/log/` | n/a | One log file per ingest |
-| `raw/` | n/a | One citation record per source, named `YYYY-MM-DD-<slug>.md` |
+| `raw/` | n/a | One citation record per source, named `YY-MM-DD-HHMM-<slug>.md` (older `YYYY-MM-DD-<slug>.md` names stay valid) |
 
 `wiki/index.md` lists every page by status. It is generated, so do not edit it by hand. To print a fresh copy, run `py -I scripts/lint.py --root . --index --stdout`.
 
@@ -75,6 +75,7 @@ py -I scripts/lint_diff.py --base origin/main --root .
 On Linux or macOS, use `python3 -I` instead of `py -I`.
 
 - `lint.py` checks content: frontmatter, slugs, source locators, raw records, stray files, and instruction-like text. A `HARD` finding fails the run. `WARN` and `INFO` findings do not.
+- `lint.py` also scans `wiki/`, `raw/` and `skills/` for secrets, local paths, mail addresses, private IP addresses and the owner title. Names and handles are only caught if you pass a local, uncommitted list: `python3 -I scripts/lint.py --root . --deny-file <your-deny-file>` (one keyword per line; without it lint warns `DENY_SKIPPED`).
 - `lint_diff.py` classifies a change as `ingest`, `flip`, `index`, or `schema`, and fails when a change mixes classes.
 - `git config core.hooksPath scripts/hooks` turns on a pre-push hook that runs both scripts.
 
