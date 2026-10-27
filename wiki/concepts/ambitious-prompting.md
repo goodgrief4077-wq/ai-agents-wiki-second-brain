@@ -9,8 +9,8 @@ sources:
   - 26-10-27-1007-felix-rieseberg-ambitious @ Depth
   - 26-10-27-1007-felix-rieseberg-ambitious @ Range
   - 26-10-27-1007-felix-rieseberg-ambitious @ We have been here before
-updated: 2026-10-27T10:07:46+09:00
-status: draft
+updated: 2026-10-27T10:10:13+09:00
+status: live
 ---
 A way to ask a model for more than the literal task, taught in one Claude engineer's blog post. It names four types of ambition: speed (the same work faster, treated as already well understood), altitude, depth and range. The post's advice is not tied to one model. Related: [[agent-workflow-patterns]], [[claude-code]], [[writing-effective-agent-skills]].
 
