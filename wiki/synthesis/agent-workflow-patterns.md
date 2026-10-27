@@ -4,8 +4,10 @@ type: synthesis
 sources:
   - 2026-10-11-building-effective-agents @ page
   - 2026-10-11-claude-cookbooks-agent-patterns @ page
-updated: 2026-10-11T16:04:03+09:00
+  - 26-10-27-1138-wiki-pr52-page-tiers @ description
+updated: 2026-10-27T11:40:00+09:00
 status: draft
+tier: core
 ---
 Anthropic's guidance on agentic systems separates fixed workflows from model-directed agents and names a small set of workflow patterns, with minimal notebook implementations in its cookbook.
 

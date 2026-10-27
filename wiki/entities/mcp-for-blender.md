@@ -4,8 +4,11 @@ type: tool
 sources:
   - 2026-10-11-mcp-for-blender @ page
   - 2026-10-12-mcp-for-blender-releases @ releases
-updated: 2026-10-12T09:11:17+09:00
+  - 26-10-27-1138-wiki-pr52-page-tiers @ description
+updated: 2026-10-27T11:40:00+09:00
 status: draft
+tier: volatile
+review_by: 2027-01-25
 tool_version: unreleased
 ---
 MCP for Blender is a third-party MCP server and Blender addon that lets LLM clients drive Blender for 3D modelling.

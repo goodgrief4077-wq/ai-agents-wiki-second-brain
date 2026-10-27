@@ -4,8 +4,11 @@ type: tool
 sources:
   - 2026-10-11-comfyui @ page
   - 2026-10-12-comfyui-releases @ releases
-updated: 2026-10-12T09:09:44+09:00
+  - 26-10-27-1138-wiki-pr52-page-tiers @ description
+updated: 2026-10-27T11:40:00+09:00
 status: draft
+tier: volatile
+review_by: 2027-01-25
 tool_version: v0.39.0
 ---
 ComfyUI is a node-graph application and engine for running generative image, video, audio and 3D models locally, with an API and a cloud option.

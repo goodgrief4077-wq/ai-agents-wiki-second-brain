@@ -3,8 +3,11 @@ title: GitHub
 type: tool
 sources:
   - 2026-10-11-github-docs-what-is-github @ page
-updated: 2026-10-11T16:19:09+09:00
+  - 26-10-27-1138-wiki-pr52-page-tiers @ description
+updated: 2026-10-27T11:40:00+09:00
 status: draft
+tier: volatile
+review_by: 2027-01-25
 tool_version: hosted-service
 ---
 GitHub is a hosted platform for building software, based on Git, that adds repository hosting, planning, review, automation and security tools.

@@ -4,8 +4,11 @@ type: tool
 sources:
   - 2026-10-11-berd @ page
   - 2026-10-12-berd-releases @ releases
-updated: 2026-10-12T09:09:03+09:00
+  - 26-10-27-1138-wiki-pr52-page-tiers @ description
+updated: 2026-10-27T11:40:00+09:00
 status: draft
+tier: volatile
+review_by: 2027-01-25
 tool_version: v0.6.4
 ---
 Berd is Block's open-source desktop app for working with AI agents, built with Tauri and React on top of the Goose backend.

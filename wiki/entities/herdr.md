@@ -4,8 +4,11 @@ type: tool
 sources:
   - 2026-10-11-herdr @ page
   - 2026-10-12-herdr-releases @ releases
-updated: 2026-10-12T09:26:58+09:00
+  - 26-10-27-1138-wiki-pr52-page-tiers @ description
+updated: 2026-10-27T11:40:00+09:00
 status: draft
+tier: volatile
+review_by: 2027-01-25
 tool_version: 0.9.3
 ---
 herdr is a terminal runtime for coding agents, written in Rust and described as the runtime your coding agents live on.

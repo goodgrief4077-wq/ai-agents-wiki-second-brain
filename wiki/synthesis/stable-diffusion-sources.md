@@ -5,8 +5,10 @@ sources:
   - 2026-10-11-compvis-stable-diffusion @ page
   - 2026-10-11-stability-generative-models @ page
   - 2026-10-11-diffusers @ page
-updated: 2026-10-11T16:07:52+09:00
+  - 26-10-27-1138-wiki-pr52-page-tiers @ description
+updated: 2026-10-27T11:40:00+09:00
 status: draft
+tier: core
 ---
 Stable Diffusion is a family of latent diffusion models; the original CompVis release, Stability AI's later generative-models repository and the Hugging Face Diffusers library are three different primary places to find it.
 

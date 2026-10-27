@@ -4,8 +4,11 @@ type: tool
 sources:
   - 2026-10-11-github-openai-codex @ page
   - 2026-10-12-codex-releases @ releases
-updated: 2026-10-12T09:09:36+09:00
+  - 26-10-27-1138-wiki-pr52-page-tiers @ description
+updated: 2026-10-27T11:40:00+09:00
 status: draft
+tier: volatile
+review_by: 2027-01-25
 tool_version: rust-v0.162.1
 ---
 Codex CLI is a lightweight coding agent from OpenAI that runs locally in your terminal (Apache-2.0).

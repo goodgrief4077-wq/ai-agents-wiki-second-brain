@@ -10,8 +10,10 @@ sources:
   - 2026-10-11-glukhov-llm-wiki-maintenance @ Decision Drift
   - 2026-10-11-glukhov-llm-wiki-maintenance @ Archive, Supersede, or Delete
   - 2026-10-11-glukhov-llm-wiki-maintenance @ What an LLM Wiki Linter Should Check
-updated: 2026-10-11T15:33:06+09:00
+  - 26-10-27-1138-wiki-pr52-page-tiers @ description
+updated: 2026-10-27T11:40:00+09:00
 status: live
+tier: core
 ---
 How to keep a compiled LLM wiki trustworthy over time. The article's thesis is that such a wiki can look clean while being wrong, so maintenance has to check both structure and meaning. It builds on [[llm-wiki-pattern]].
 
