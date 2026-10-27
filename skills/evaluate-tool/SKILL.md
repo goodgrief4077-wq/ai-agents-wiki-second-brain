@@ -10,7 +10,7 @@ AGENTS.md discipline) still "did not work well" in real use and was deleted the
 same day. Static code review does not
 predict usability. **Never skip straight to deep review — run it, then read it.**
 
-Four stages, each cheap enough to bail out early. Do not skip a stage forward.
+Five stages, each cheap enough to bail out early. Do not skip a stage forward.
 
 ## Stage 0 — Overlap check (30 sec)
 
@@ -114,12 +114,28 @@ The point of logging rejects too: the next time this tool (or a rebrand or fork 
 it) comes up, Stage 0 catches it in 30 seconds instead of
 repeating the full cycle.
 
+## Stage 5 — Suggest system improvements (always, even on rejects)
+
+An evaluation also teaches something about the setup it ran against. After the
+verdict, give a short list (3 to 5 items) of what the user could add, change or
+remove, each with one line of why. Check the machine first (rule: check before you
+propose installing anything) and say what is already present.
+
+- Gaps the tool exposed: a missing runtime (rootless Podman, Incus or LXC, a local
+  model server), an isolation layer for risky tools, a missing check in this skill.
+- Overlap or clutter: tools in the stack that this one makes redundant.
+- Cheaper or safer ways to try the next tool.
+- Mark each suggestion "own analysis, unsourced" when it is not in the tool's docs,
+  and keep machine details as `<placeholders>` when the list goes into the wiki.
+- Suggest only; never install or change anything without the user's go-ahead.
+
 ## Gotchas
 - Never write a deep review of a tool that failed its smoke test; log it and stop.
 - Never skip Stage 2 because the README or code looks strong.
 - Do not write a ported practice into a global file without stating the scope it was written for (Stage 3.5).
 - If the ledger is write-guarded, do not write the row directly; propose it and name the proposal file to the user.
 - Prefer a throwaway run (pnpm dlx, uvx, venv, container, clone in place) over a system-wide install.
+- Do not end an evaluation without Stage 5 suggestions, and do not act on them unasked.
 
 ## Checklist before giving a verdict
 - [ ] Stage 0 overlap checked against the ledger and the current tool stack
@@ -127,3 +143,4 @@ repeating the full cycle.
 - [ ] Stage 2 smoke test run on a real small task, pass or fail stated
 - [ ] Stage 3 and 3.5 done only if Stage 2 passed
 - [ ] Verdict is one of the listed values and the ledger row was proposed
+- [ ] Stage 5: 3 to 5 system-improvement suggestions given, machine checked first, nothing installed
