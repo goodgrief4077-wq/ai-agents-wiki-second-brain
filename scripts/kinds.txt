@@ -1,0 +1,11 @@
+# Page kinds: one per line, "<kind> <folder>". Pages of a kind live in wiki/<folder>/.
+# wiki/archive/ is built in and takes any kind. To add a kind, add a line here and
+# a template in scripts/templates/ (schema PR). The linter reads this file; no code change.
+# Merge a new kind BEFORE any page of that kind (main's copy of this file governs the merge-time check).
+# Add folders only when pages exist for them.
+tool entities
+method concepts
+synthesis synthesis
+protocol protocols
+framework frameworks
+reference references

@@ -22,7 +22,7 @@ Change = namedtuple("Change", "status path old_mode new_mode")
 HARD, WARN, INFO = "HARD", "WARN", "INFO"
 _ORDER = {HARD: 0, WARN: 1, INFO: 2}
 HUNK_RE = re.compile(r"^@@ -\d+(?:,\d+)? \+(\d+)(?:,(\d+))? @@")
-FLIP_LINE_RE = re.compile(r"^[+-](status|updated): ")
+FLIP_LINE_RE = re.compile(r"^[+-](status|updated|review_by|confidence): ")
 SYMLINK_MODE = "120000"
 
 
